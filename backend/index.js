@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const pool = require('./database/db.js');
+const { routerRepartidores } = require('./routes/repartidores.js');
 require('dotenv').config();
 
 const app = express();
@@ -8,6 +9,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+app.use("/repartidor", routerRepartidores)
 
 app.get('/', (req, res) => {
     res.send('Backend funcionando');

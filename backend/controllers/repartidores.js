@@ -1,5 +1,6 @@
+const pool = require("../database/db.js");
 
-export const crearTablaRepartidores = (req,res) => {
+const motrarTodasTablas = async (req, res) => {
     try {
         const [rows] = await pool.query('SHOW TABLES');
         res.json(rows);
@@ -15,7 +16,7 @@ export const crearTablaRepartidores = (req,res) => {
 };
 
 
-export const mostrarTablas = (req, res) => {
+const crearTablaRepartidores = async (req, res) => {
     try {
         await pool.query(`
       CREATE TABLE IF NOT EXISTS repartidores (
@@ -37,7 +38,7 @@ export const mostrarTablas = (req, res) => {
 };
 
 
-app.post('/crear-repartidor', async (req, res) => {
+const crearRepartidor = async (req, res) => {
     const { nombre, estatus, apodo } = req.body;
 
     // Validar que el nombre no esté vacío
@@ -50,17 +51,17 @@ app.post('/crear-repartidor', async (req, res) => {
     const estatusFinal = estatus && estatusValidos.includes(estatus) ? estatus : 'activo';
 
 
-   try {
-    const [resultado] = await pool.query(
-        `INSERT INTO repartidores (nombre, estatus, apodo) VALUES (?, ?, ?)`,
-        [nombre, estatusFinal, apodo]
-    );
+    try {
+        const [resultado] = await pool.query(
+            `INSERT INTO repartidores (nombre, estatus, apodo) VALUES (?, ?, ?)`,
+            [nombre, estatusFinal, apodo]
+        );
 
         res.json({
             mensaje: 'Repartidor creado exitosamente',
             id: resultado.insertId,
             nombre,
-            apodo, 
+            apodo,
             estatus: estatusFinal
         });
 
@@ -70,5 +71,123 @@ app.post('/crear-repartidor', async (req, res) => {
             mensaje: 'Error al crear el repartidor'
         });
     }
-});
+};
+
+
+const obtenerRepartidores = async (req, res) => {
+    try {
+        const [rows] = await pool.query(
+            `SELECT * FROM repartidores ORDER BY nombre`
+        );
+
+        res.json(rows);
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            mensaje: 'Error al obtener repartidores'
+        });
+    }
+};
+
+
+const obtenerRepartidor = async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        const [rows] = await pool.query(
+            `SELECT * FROM repartidores WHERE id = ?`,
+            [id]
+        );
+
+        if (rows.length === 0) {
+            return res.status(404).json({
+                mensaje: 'Repartidor no encontrado'
+            });
+        }
+
+        res.json(rows[0]);
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            mensaje: 'Error al obtener repartidor'
+        });
+    }
+};
+
+
+const actualizarRepartidor = async (req, res) => {
+    const { id } = req.params;
+    const { nombre, estatus, apodo } = req.body;
+
+    try {
+        const [resultado] = await pool.query(
+            `UPDATE repartidores
+             SET nombre = ?, estatus = ?, apodo = ?
+             WHERE id = ?`,
+            [nombre, estatus, apodo, id]
+        );
+
+        if (resultado.affectedRows === 0) {
+            return res.status(404).json({
+                mensaje: 'Repartidor no encontrado'
+            });
+        }
+
+        res.json({
+            mensaje: 'Repartidor actualizado correctamente'
+        });
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            mensaje: 'Error al actualizar repartidor'
+        });
+    }
+};
+
+
+const eliminarRepartidor = async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        const [resultado] = await pool.query(
+            `DELETE FROM repartidores WHERE id = ?`,
+            [id]
+        );
+
+        if (resultado.affectedRows === 0) {
+            return res.status(404).json({
+                mensaje: 'Repartidor no encontrado'
+            });
+        }
+
+        res.json({
+            mensaje: 'Repartidor eliminado correctamente'
+        });
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            mensaje: 'Error al eliminar repartidor'
+        });
+    }
+};
+
+
+
+
+
+module.exports = {
+    crearRepartidor,
+    obtenerRepartidores,
+    obtenerRepartidor,
+    actualizarRepartidor,
+    eliminarRepartidor,
+    motrarTodasTablas,
+    crearTablaRepartidores,
+    crearRepartidor
+};
+
 

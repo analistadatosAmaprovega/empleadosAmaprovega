@@ -16,18 +16,22 @@ const motrarTodasTablas = async (req, res) => {
 };
 
 
+
 const crearTablaRepartidores = async (req, res) => {
     try {
         await pool.query(`
-      CREATE TABLE IF NOT EXISTS repartidores (
-        id INT AUTO_INCREMENT PRIMARY KEY,
-        nombre VARCHAR(100) NOT NULL,
-        apodo VARCHAR(100),
-        estatus ENUM('activo', 'inactivo') NOT NULL DEFAULT 'activo'
-      )
-    `);
+            CREATE TABLE IF NOT EXISTS repartidores (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                nombre VARCHAR(100) NOT NULL,
+                apellido VARCHAR(100) NOT NULL,
+                apodo VARCHAR(100),
+                estatus ENUM('activo', 'inactivo') NOT NULL DEFAULT 'activo'
+            )
+        `);
 
-        res.json({ mensaje: 'Tabla repartidores creada exitosamente' });
+        res.json({
+            mensaje: 'Tabla repartidores creada exitosamente'
+        });
 
     } catch (error) {
         console.log(error);
@@ -37,9 +41,8 @@ const crearTablaRepartidores = async (req, res) => {
     }
 };
 
-
 const crearRepartidor = async (req, res) => {
-    const { nombre, estatus, apodo } = req.body;
+    const { nombre, estatus, apodo, apellido} = req.body;
 
     // Validar que el nombre no esté vacío
     if (!nombre) {
@@ -53,14 +56,15 @@ const crearRepartidor = async (req, res) => {
 
     try {
         const [resultado] = await pool.query(
-            `INSERT INTO repartidores (nombre, estatus, apodo) VALUES (?, ?, ?)`,
-            [nombre, estatusFinal, apodo]
+            `INSERT INTO repartidores (nombre, estatus, apellido, apodo) VALUES (?, ?, ?, ?)`,
+            [nombre, estatusFinal, apellido, apodo]
         );
 
         res.json({
             mensaje: 'Repartidor creado exitosamente',
             id: resultado.insertId,
             nombre,
+            apellido,
             apodo,
             estatus: estatusFinal
         });
@@ -119,14 +123,14 @@ const obtenerRepartidor = async (req, res) => {
 
 const actualizarRepartidor = async (req, res) => {
     const { id } = req.params;
-    const { nombre, estatus, apodo } = req.body;
+    const { nombre, estatus, apodo, apellido } = req.body;
 
     try {
         const [resultado] = await pool.query(
             `UPDATE repartidores
-             SET nombre = ?, estatus = ?, apodo = ?
+             SET nombre = ?, estatus = ?, apodo = ?, apellido = ?
              WHERE id = ?`,
-            [nombre, estatus, apodo, id]
+            [nombre, estatus, apodo, apellido, id]
         );
 
         if (resultado.affectedRows === 0) {
@@ -176,10 +180,53 @@ const eliminarRepartidor = async (req, res) => {
 };
 
 
+const cambiarEstatusRepartidor = async (req, res) => {
+    const { id } = req.params;
 
+    try {
+
+        const [rows] = await pool.query(
+            `SELECT estatus
+             FROM repartidores
+             WHERE id = ?`,
+            [id]
+        );
+
+        if (rows.length === 0) {
+            return res.status(404).json({
+                mensaje: 'Repartidor no encontrado'
+            });
+        }
+
+        const nuevoEstatus =
+            rows[0].estatus === 'activo'
+                ? 'inactivo'
+                : 'activo';
+
+        await pool.query(
+            `UPDATE repartidores
+             SET estatus = ?
+             WHERE id = ?`,
+            [nuevoEstatus, id]
+        );
+
+        res.json({
+            mensaje: 'Estatus actualizado correctamente',
+            id,
+            estatus: nuevoEstatus
+        });
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            mensaje: 'Error al cambiar el estatus'
+        });
+    }
+};
 
 
 module.exports = {
+    cambiarEstatusRepartidor,
     crearRepartidor,
     obtenerRepartidores,
     obtenerRepartidor,

@@ -1,15 +1,16 @@
 const express = require('express');
-const routerRepartidores = express.Router();
+const empleadosController = require('../controllers/empleados.js');
 
-const repartidorController = require('../controllers/repartidores.js');
-routerRepartidores.post('/creartabla', repartidorController.crearTablaRepartidores);
-routerRepartidores.post('/nuevo', repartidorController.crearRepartidor);
-routerRepartidores.get('/', repartidorController.obtenerRepartidores);
-routerRepartidores.get('/:id', repartidorController.obtenerRepartidor);
-routerRepartidores.post('/', repartidorController.crearRepartidor);
-routerRepartidores.put('/:id', repartidorController.actualizarRepartidor);
-routerRepartidores.delete('/:id', repartidorController.eliminarRepartidor);
-routerRepartidores.patch('/:id', repartidorController.cambiarEstatusRepartidor);
+const routerEmpleados = express.Router()
+
+routerEmpleados.post('/creartabla', empleadosController.crearTablaEmpleados);
+routerEmpleados.post('/nuevo', empleadosController.crearEmpleado);
+routerEmpleados.get('/', empleadosController.obtenerEmpleado);
+routerEmpleados.get('/:id', empleadosController.obtenerUnEmpleado);
+routerEmpleados.post('/', empleadosController.crearEmpleado);
+routerEmpleados.put('/:id', empleadosController.actualizarEmpleado);
+routerEmpleados.delete('/:id', empleadosController.eliminarEmpleado);
+routerEmpleados.patch('/:id', empleadosController.cambiarEstatusEmpleado);
 
 
-module.exports = { routerRepartidores };
+module.exports = { routerEmpleados: routerEmpleados };

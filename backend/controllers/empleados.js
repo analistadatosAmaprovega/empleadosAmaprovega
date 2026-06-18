@@ -37,6 +37,7 @@ const crearTablaEmpleados = async (req, res) => {
                 id INT AUTO_INCREMENT PRIMARY KEY,
                 nombre VARCHAR(100) NOT NULL,
                 apellido VARCHAR(100) NOT NULL,
+                apodo VARCHAR(20),
                 flota VARCHAR(20),
                 cargo VARCHAR(100),
                 departamento VARCHAR(100),
@@ -65,6 +66,7 @@ const crearEmpleado = async (req, res) => {
     const {
         nombre,
         apellido,
+        apodo,
         flota,
         cargo,
         departamento,
@@ -97,6 +99,7 @@ const crearEmpleado = async (req, res) => {
             (
                 nombre,
                 apellido,
+                apodo,
                 flota,
                 cargo,
                 departamento,
@@ -104,10 +107,11 @@ const crearEmpleado = async (req, res) => {
                 usuario,
                 password_hash
             )
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
             [
                 nombre,
                 apellido,
+                apodo,
                 flota,
                 cargo,
                 departamento,
@@ -192,6 +196,7 @@ const actualizarEmpleado = async (req, res) => {
     const {
         nombre,
         apellido,
+        apodo,
         flota,
         cargo,
         departamento,
@@ -207,6 +212,7 @@ const actualizarEmpleado = async (req, res) => {
              SET
                 nombre = ?,
                 apellido = ?,
+                apodo = ?,
                 flota = ?,
                 cargo = ?,
                 departamento = ?,
@@ -217,6 +223,7 @@ const actualizarEmpleado = async (req, res) => {
             [
                 nombre,
                 apellido,
+                apodo,
                 flota,
                 cargo,
                 departamento,
@@ -345,8 +352,7 @@ module.exports = {
     actualizarEmpleado,
     eliminarEmpleado,
     motrarTodasTablas,
-    crearTablaEmpleados,
-    crearEmpleado
+    crearTablaEmpleados
 };
 
 

@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const pool = require('./database/db.js');
-const { routerEmpleados } = require('./routes/repartidores.js');
+const { routerEmpleados } = require('./routes/empleados.js');
 require('dotenv').config();
 
 const app = express();
@@ -9,7 +9,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-app.use("/repartidor", routerEmpleados)
+app.use("/empleados", routerEmpleados)
 
 app.get('/', (req, res) => {
     res.send('Backend funcionando');
@@ -45,7 +45,7 @@ app.listen(process.env.PORT, () => {
     .then(async conn => {
         const [result] = await conn.query('SELECT DATABASE() AS baseDatos');
         console.log('Conectado a MariaDB');
-        console.log('Conectado a base de datos:', result[0].baseDatos);
+        console.log('DDBB:', result[0].baseDatos);
         conn.release();
     })
     .catch(err => {

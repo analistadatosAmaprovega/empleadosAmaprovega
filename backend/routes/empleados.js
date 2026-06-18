@@ -5,7 +5,7 @@ const routerEmpleados = express.Router()
 
 routerEmpleados.post('/creartabla', empleadosController.crearTablaEmpleados);
 routerEmpleados.post('/nuevo', empleadosController.crearEmpleado);
-routerEmpleados.get('/', empleadosController.obtenerEmpleado);
+routerEmpleados.get('/', empleadosController.obtenerUnEmpleado);
 routerEmpleados.get('/:id', empleadosController.obtenerUnEmpleado);
 routerEmpleados.post('/', empleadosController.crearEmpleado);
 routerEmpleados.put('/:id', empleadosController.actualizarEmpleado);

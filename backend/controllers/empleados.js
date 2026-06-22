@@ -1,4 +1,5 @@
 const pool = require("../database/db.js");
+const bcrypt = require('bcrypt');
 
 const motrarTodasTablas = async (req, res) => {
     try {
@@ -16,24 +17,57 @@ const motrarTodasTablas = async (req, res) => {
 };
 
 
+// const crearTablaEmpleados = async (req, res) => {
+//     try {
+//         await pool.query(`
+//             CREATE TABLE IF NOT EXISTS empleados (
+//                 id INT AUTO_INCREMENT PRIMARY KEY,
+//                 nombre VARCHAR(100) NOT NULL,
+//                 apellido VARCHAR(100) NOT NULL,
+//                 apodo VARCHAR(20),
+//                 flota VARCHAR(20),
+//                 cargo VARCHAR(100),
+//                 departamento VARCHAR(100),
+//                 estatus ENUM('activo','inactivo','suspendido') DEFAULT 'activo',
+//                 usuario VARCHAR(50),
+//                 password_hash VARCHAR(255),
+//                 fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+//             )
+//         `);
 
-// CREATE TABLE empleados (
-//     id INT AUTO_INCREMENT PRIMARY KEY,
-//     nombre VARCHAR(100) NOT NULL,
-//     apellido VARCHAR(100) NOT NULL,
-//     flota VARCHAR(20),
-//     cargo VARCHAR(100),
-//     departamento VARCHAR(100),
-//     estatus ENUM('activo','inactivo','suspendido') DEFAULT 'activo',
-//     usuario VARCHAR(50),
-//     password_hash VARCHAR(255),
-//     fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-// );
+//         res.json({
+//             mensaje: 'Tabla empleados creada exitosamente'
+//         });
+
+//     } catch (error) {
+//         console.log(error);
+
+//         res.status(500).json({
+//             mensaje: 'Error al crear tabla empleados'
+//         });
+//     }
+// };
+
 
 const crearTablaEmpleados = async (req, res) => {
     try {
+        // 1. Verificar si la tabla existe
+        const [tabla] = await pool.query(`
+            SELECT COUNT(*) AS existe
+            FROM information_schema.tables
+            WHERE table_schema = DATABASE()
+            AND table_name = 'empleados'
+        `);
+
+        if (tabla[0].existe > 0) {
+            return res.json({
+                mensaje: 'Se encontro una tabla con el nombre -> Empleados'
+            });
+        }
+
+        // 2. Crear la tabla si no existe
         await pool.query(`
-            CREATE TABLE IF NOT EXISTS empleados (
+            CREATE TABLE empleados (
                 id INT AUTO_INCREMENT PRIMARY KEY,
                 nombre VARCHAR(100) NOT NULL,
                 apellido VARCHAR(100) NOT NULL,
@@ -61,8 +95,9 @@ const crearTablaEmpleados = async (req, res) => {
     }
 };
 
-const crearEmpleado = async (req, res) => {
 
+
+const crearEmpleado = async (req, res) => {
     const {
         nombre,
         apellido,
@@ -72,28 +107,24 @@ const crearEmpleado = async (req, res) => {
         departamento,
         estatus,
         usuario,
-        password_hash
+        password
     } = req.body;
 
-    if (!nombre || !apellido) {
+    if (!nombre || !apellido || !password) {
         return res.status(400).json({
-            mensaje: 'Nombre y apellido son requeridos'
+            mensaje: 'Nombre, apellido y contraseña son requeridos'
         });
     }
 
-    const estatusValidos = [
-        'activo',
-        'inactivo',
-        'suspendido'
-    ];
-
-    const estatusFinal =
-        estatusValidos.includes(estatus)
-            ? estatus
-            : 'activo';
+    const estatusValidos = ['activo', 'inactivo', 'suspendido'];
+    const estatusFinal = estatusValidos.includes(estatus) ? estatus : 'activo';
 
     try {
+        // 3. Cifrar la contraseña usando un factor de costo (saltRounds) de 10
+        const saltRounds = 10;
+        const password_hash = await bcrypt.hash(password, saltRounds);
 
+        // 4. Insertar en la base de datos pasándole la contraseña ya encriptada
         const [resultado] = await pool.query(
             `INSERT INTO empleados
             (
@@ -117,24 +148,22 @@ const crearEmpleado = async (req, res) => {
                 departamento,
                 estatusFinal,
                 usuario,
-                password_hash
+                password_hash // <--- Aquí va el hash generado por bcrypt
             ]
         );
 
-        res.json({
+        return res.json({
             mensaje: 'Empleado creado exitosamente',
             id: resultado.insertId
         });
 
     } catch (error) {
-        console.log(error);
-
-        res.status(500).json({
+        console.error(error);
+        return res.status(500).json({
             mensaje: 'Error al crear empleado'
         });
     }
 };
-
 
 const obtenerEmpleados = async (req, res) => {
 

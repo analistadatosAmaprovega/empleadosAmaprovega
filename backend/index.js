@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const pool = require('./database/db.js');
 const { routerEmpleados } = require('./routes/empleados.js');
+const { crearTablaEmpleados } = require('./controllers/empleados.js');
 require('dotenv').config();
 
 const app = express();

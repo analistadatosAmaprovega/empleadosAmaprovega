@@ -67,20 +67,20 @@ const crearTablaEmpleados = async (req, res) => {
 
         // 2. Crear la tabla si no existe
         await pool.query(`
-            CREATE TABLE empleados (
-                id INT AUTO_INCREMENT PRIMARY KEY,
-                nombre VARCHAR(100) NOT NULL,
-                apellido VARCHAR(100) NOT NULL,
-                apodo VARCHAR(20),
-                flota VARCHAR(20),
-                cargo VARCHAR(100),
-                departamento VARCHAR(100),
-                estatus ENUM('activo','inactivo','suspendido') DEFAULT 'activo',
-                usuario VARCHAR(50),
-                password_hash VARCHAR(255),
-                fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-            )
-        `);
+    CREATE TABLE empleados (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        nombre VARCHAR(100) NOT NULL,
+        apellido VARCHAR(100) NOT NULL,
+        apodo VARCHAR(20),
+        flota VARCHAR(20),
+        cargo VARCHAR(100),
+        departamento VARCHAR(100),
+        estatus ENUM('activo','inactivo','suspendido') DEFAULT 'activo',
+        usuario VARCHAR(50) NOT NULL UNIQUE,
+        password_hash VARCHAR(255),
+        fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    )
+`);
 
         res.json({
             mensaje: 'Tabla empleados creada exitosamente'
@@ -148,7 +148,7 @@ const crearEmpleado = async (req, res) => {
                 departamento,
                 estatusFinal,
                 usuario,
-                password_hash // <--- Aquí va el hash generado por bcrypt
+                password_hash
             ]
         );
 
@@ -237,31 +237,21 @@ const actualizarEmpleado = async (req, res) => {
     try {
 
         const [resultado] = await pool.query(
-            `UPDATE empleados
-             SET
-                nombre = ?,
-                apellido = ?,
-                apodo = ?,
-                flota = ?,
-                cargo = ?,
-                departamento = ?,
-                estatus = ?,
-                usuario = ?,
-                password_hash = ?
-             WHERE id = ?`,
-            [
-                nombre,
-                apellido,
-                apodo,
-                flota,
-                cargo,
-                departamento,
-                estatus,
-                usuario,
-                password_hash,
-                id
-            ]
-        );
+    `UPDATE empleados
+     SET
+        nombre = COALESCE(?, nombre),
+        apellido = COALESCE(?, apellido),
+        apodo = COALESCE(?, apodo),
+        flota = COALESCE(?, flota),
+        cargo = COALESCE(?, cargo),
+        departamento = COALESCE(?, departamento),
+        estatus = COALESCE(?, estatus),
+        usuario = COALESCE(?, usuario),
+        password_hash = COALESCE(?, password_hash)
+     WHERE id = ?`,
+    [nombre, apellido, apodo, flota, cargo, departamento, estatus, usuario, password_hash, id]
+);
+
 
         if (resultado.affectedRows === 0) {
             return res.status(404).json({

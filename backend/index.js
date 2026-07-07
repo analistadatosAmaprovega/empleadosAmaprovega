@@ -3,6 +3,7 @@ const cors = require('cors');
 const pool = require('./database/db.js');
 const { routerEmpleados } = require('./routes/empleados.js');
 const { crearTablaEmpleados } = require('./controllers/empleados.js');
+const { routerLlegadaEmpleados } = require('./routes/llegadaInicial.js');
 require('dotenv').config();
 
 const app = express();
@@ -11,10 +12,12 @@ app.use(cors());
 app.use(express.json());
 
 app.use("/empleados", routerEmpleados)
+app.use("/registroLlegada", routerLlegadaEmpleados)
 
 app.get('/', (req, res) => {
     res.send('Backend funcionando');
 });
+
 
 app.get('/a', (req, res) => {
     res.send('Bienvenido a la ruta /a');

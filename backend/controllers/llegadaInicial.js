@@ -48,7 +48,7 @@ const registrarLlegada = async (req, res) => {
 
         const ahora = new Date();
         const fecha = ahora.toISOString().split('T')[0]; 
-        const hora = ahora.toTimeString().split(' ')[0];  
+        const hora  = ahora.toTimeString().split(' ')[0];  
 
         const [resultado] = await pool.query(
             `INSERT INTO llegada_inicial (id_empleado, nombre, fecha, hora, location)

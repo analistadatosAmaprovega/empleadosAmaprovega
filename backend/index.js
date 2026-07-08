@@ -5,23 +5,28 @@ const { routerEmpleados } = require('./routes/empleados.js');
 const { crearTablaEmpleados } = require('./controllers/empleados.js');
 const { routerLlegadaEmpleados } = require('./routes/llegadaInicial.js');
 require('dotenv').config();
+const cookieParser = require('cookie-parser');
+const { routerLogin } = require('./routes/login.js');
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
+app.use(cookieParser());
+
 
 app.use("/empleados", routerEmpleados)
 app.use("/registroLlegada", routerLlegadaEmpleados)
+app.use("/login", routerLogin)
 
 app.get('/', (req, res) => {
     res.send('Backend funcionando');
 });
 
-
 app.get('/a', (req, res) => {
     res.send('Bienvenido a la ruta /a');
 });
+
 app.listen(process.env.PORT, () => {
     console.log(`Servidor corriendo en puerto ${process.env.PORT}`);
 });

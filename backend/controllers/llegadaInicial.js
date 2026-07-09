@@ -44,16 +44,22 @@ const crearTablaLlegadaInicial = async (req, res) => {
 
 const registrarLlegada = async (req, res) => {
     try {
-        const { id_empleado, nombre, location } = req.body;
+        // const datosEmpleado = req.cookies.sesion_empleadoF
+const datosEmpleado = JSON.parse(req.cookies.sesion_empleado);
+        console.log(datosEmpleado);
+
+  
+
+
 
         const ahora = new Date();
-        const fecha = ahora.toISOString().split('T')[0]; 
-        const hora  = ahora.toTimeString().split(' ')[0];  
+        const fecha = ahora.toISOString().split('T')[0];
+        const hora = ahora.toTimeString().split(' ')[0];
 
         const [resultado] = await pool.query(
             `INSERT INTO llegada_inicial (id_empleado, nombre, fecha, hora, location)
              VALUES (?, ?, ?, ?, ?)`,
-            [id_empleado, nombre, fecha, hora, location]
+            [datosEmpleado.id, datosEmpleado.nombre, fecha, hora, "La Vega, R.D."]
         );
 
         return res.status(201).json({

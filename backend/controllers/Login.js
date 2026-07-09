@@ -75,6 +75,11 @@ const verificarSesion = (req, res, next) => {
 
 
 const cerrarSesion = async (req, res) => {
+
+    // const cookieSesion = req.cookies.sesion_empleado;
+const datosEmpleado = JSON.parse(req.cookies.sesion_empleado);
+
+    
     try {
         res.clearCookie('sesion_empleado', {
             httpOnly: true,
@@ -83,7 +88,8 @@ const cerrarSesion = async (req, res) => {
         });
 
         return res.status(200).json({
-            mensaje: 'Sesión cerrada correctamente. Cookie eliminada del navegador.'
+            mensaje: 'Sesión cerrada correctamente. Cookie eliminada del navegador.',
+            datos: datosEmpleado
         });
 
     } catch (error) {

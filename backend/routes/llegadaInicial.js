@@ -1,11 +1,12 @@
 const express = require('express');
 const llegadaInicial = require('../controllers/llegadaInicial.js');
+const { verifyToken } = require('../middlewares/auth.js');
 
 const routerLlegadaEmpleados = express.Router()
 
 routerLlegadaEmpleados.post('/creartabla', llegadaInicial.crearTablaLlegadaInicial);
 
-routerLlegadaEmpleados.post('/nuevo', llegadaInicial.registrarLlegada);
+routerLlegadaEmpleados.post('/nuevo', verifyToken, llegadaInicial.registrarLlegada);
 
 
 

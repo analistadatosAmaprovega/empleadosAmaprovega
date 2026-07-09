@@ -5,7 +5,7 @@ const { iniciarSesion, cerrarSesion, verificarSesion } = require('../controllers
 const routerLogin = express.Router()
 
 routerLogin.post('/inicioSession', iniciarSesion);
-routerLogin.post('/salirSession', cerrarSesion);
+routerLogin.post('/cerrarSession', cerrarSesion);
 routerLogin.get('/verificarSession', verificarSesion);
 
 

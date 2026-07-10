@@ -77,9 +77,16 @@ const verificarSesion = (req, res, next) => {
 const cerrarSesion = async (req, res) => {
 
     // const cookieSesion = req.cookies.sesion_empleado;
-const datosEmpleado = JSON.parse(req.cookies.sesion_empleado);
 
-    
+    const data = req.cookies.sesion_empleado
+    if (!data) return res.status(200).json({
+        mensaje: 'No existe session disponible para cerrar',
+        datosEliminados: "No hay datos para mostrar"
+    });
+
+    const datosEmpleado = JSON.parse(req.cookies.sesion_empleado);
+
+
     try {
         res.clearCookie('sesion_empleado', {
             httpOnly: true,
@@ -87,10 +94,11 @@ const datosEmpleado = JSON.parse(req.cookies.sesion_empleado);
             sameSite: 'lax'
         });
 
+
         return res.status(200).json({
             mensaje: 'Sesión cerrada correctamente. Cookie eliminada del navegador.',
-            datos: datosEmpleado
-        });
+            datosEliminados: datosEmpleado
+        }); 
 
     } catch (error) {
         console.error('Error al cerrar sesión:', error);
@@ -99,6 +107,7 @@ const datosEmpleado = JSON.parse(req.cookies.sesion_empleado);
         });
     }
 };
+
 
 
 

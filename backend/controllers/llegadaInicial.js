@@ -43,14 +43,15 @@ const crearTablaLlegadaInicial = async (req, res) => {
 };
 
 const registrarLlegada = async (req, res) => {
+
+    const datosEmpleadoLOG = req.cookies.sesion_empleado
+    const datosEmpleado = JSON.parse(req.cookies.sesion_empleado);
+
+    console.log(datosEmpleado, 'PARSEADO');
+    console.log(datosEmpleadoLOG, 'DIRECTO DE LA COOKIE');
+
+
     try {
-        // const datosEmpleado = req.cookies.sesion_empleadoF
-const datosEmpleado = JSON.parse(req.cookies.sesion_empleado);
-        console.log(datosEmpleado);
-
-  
-
-
 
         const ahora = new Date();
         const fecha = ahora.toISOString().split('T')[0];
@@ -64,9 +65,11 @@ const datosEmpleado = JSON.parse(req.cookies.sesion_empleado);
 
         return res.status(201).json({
             mensaje: 'Llegada registrada correctamente',
-            id: resultado.insertId,
+            usuario_ID: datosEmpleado.id,
+            Nombre: datosEmpleado.nombre,
             fecha,
-            hora
+            hora,
+            Lugar: "La Vega, R.D."
         });
 
     } catch (error) {

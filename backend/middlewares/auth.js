@@ -12,7 +12,7 @@ const verifyToken = (req, res, next) => {
     // req.user = token; 
     next();
   } catch (error) {
-    return res.status(403).json({ error: 'Algo salio mal' });
+    return res.status(403).json({ error: 'Algo salio mal' });D
   }
 };
 

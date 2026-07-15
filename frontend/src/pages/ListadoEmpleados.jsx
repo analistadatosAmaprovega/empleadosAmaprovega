@@ -1,15 +1,22 @@
 import { useMemo, useState } from "react";
 
+
 const DATOS_PRUEBA = [
   { id: 1, nombre: "María", apellido: "Rodríguez", departamento: "Ventas", horaProgramada: "08:00 AM", hora: "08:03 AM", estado: "activo", fecha: "2026-07-14" },
   { id: 2, nombre: "Juan", apellido: "Pérez", departamento: "Sistemas", horaProgramada: "08:00 AM", hora: "07:58 AM", estado: "activo", fecha: "2026-07-14" },
   { id: 3, nombre: "Ana", apellido: "Gómez", departamento: "Recursos Humanos", horaProgramada: "08:00 AM", hora: "08:10 AM", estado: "inactivo", fecha: "2026-07-14" },
-  { id: 4, nombre: "Carlos", apellido: "Fernández", departamento: "Sistemas", horaProgramada: "08:30 AM", hora: "08:15 AM", estado: "activo", fecha: "2026-07-13" },
+  { id: 4, nombre: "Carlos", apellido: "Fernández", departamento: "Sistemas", horaProgramada: "08:30 AM", hora: "08:15 AM", estado: "suspendido", fecha: "2026-07-13" },
   { id: 5, nombre: "Luisa", apellido: "Martínez", departamento: "Contabilidad", horaProgramada: "08:00 AM", hora: "07:45 AM", estado: "activo", fecha: "2026-07-13" },
   { id: 6, nombre: "Pedro", apellido: "Sánchez", departamento: "Ventas", horaProgramada: "08:30 AM", hora: "08:20 AM", estado: "inactivo", fecha: "2026-07-13" },
-  { id: 7, nombre: "Rosa", apellido: "Díaz", departamento: "Recursos Humanos", horaProgramada: "08:00 AM", hora: "08:05 AM", estado: "activo", fecha: "2026-07-10" },
+  { id: 7, nombre: "Rosa", apellido: "Díaz", departamento: "Recursos Humanos", horaProgramada: "08:00 AM", hora: "08:05 AM", estado: "suspendido", fecha: "2026-07-10" },
   { id: 8, nombre: "Miguel", apellido: "Torres", departamento: "Contabilidad", horaProgramada: "08:00 AM", hora: "08:30 AM", estado: "activo", fecha: "2026-07-10" },
 ];
+
+const ESTILOS_ESTADO = {
+  activo: { punto: "bg-green-400", etiqueta: "Activo" },
+  inactivo: { punto: "bg-red-500", etiqueta: "Inactivo" },
+  suspendido: { punto: "bg-[#ffa509]", etiqueta: "Suspendido" },
+};
 
 const NOMBRES_MES = [
   "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
@@ -140,7 +147,6 @@ export default function ListadoAsistencia() {
   return (
     <div className="w-full min-h-screen bg-slate-50">
       <div className="max-w-5xl mx-auto p-6 font-sans text-slate-800">
-        {/* Encabezado */}
         <div className="flex flex-wrap items-end justify-between gap-4 mb-5">
           <div>
             <h1 className="text-2xl font-bold text-slate-900">Asistencia</h1>
@@ -152,7 +158,6 @@ export default function ListadoAsistencia() {
           </div>
 
           <div className="flex flex-wrap gap-2">
-            {/* Filtro por estado */}
             <select
               value={estadoFiltro}
               onChange={(e) => setEstadoFiltro(e.target.value)}
@@ -161,9 +166,9 @@ export default function ListadoAsistencia() {
               <option value="todos">Todos los estados</option>
               <option value="activo">Activos</option>
               <option value="inactivo">Inactivos</option>
+              <option value="suspendido">Suspendidos.</option>
             </select>
 
-            {/* Filtro por fecha con calendario desplegable */}
             <div className="relative">
               <button
                 onClick={() => setCalendarioAbierto((abierto) => !abierto)}
@@ -185,14 +190,12 @@ export default function ListadoAsistencia() {
           </div>
         </div>
 
-        {/* Alerta de error */}
         {error && (
           <div className="bg-red-50 border border-red-200 text-red-800 text-sm px-4 py-2.5 rounded-lg mb-4">
             <strong>No se pudo cargar el listado.</strong> {error}
           </div>
         )}
 
-        {/* Tabla */}
         <div className="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm">
           {cargando ? (
             <div className="py-10 text-center text-slate-500 text-sm">
@@ -212,6 +215,7 @@ export default function ListadoAsistencia() {
                     <th className="text-left font-semibold text-slate-600 px-4 py-3">Departamento</th>
                     <th className="text-left font-semibold text-slate-600 px-4 py-3">Hora programada</th>
                     <th className="text-left font-semibold text-slate-600 px-4 py-3">Hora</th>
+                    <th className="text-left font-semibold text-slate-600 px-4 py-3">Estado</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -229,6 +233,16 @@ export default function ListadoAsistencia() {
                       </td>
                       <td className="px-4 py-3 text-slate-500">{registro.horaProgramada}</td>
                       <td className="px-4 py-3 text-slate-500">{registro.hora}</td>
+                      <td className="px-4 py-3">
+                        <span className="inline-flex items-center gap-2">
+                          <span
+                            className={`h-2.5 w-2.5 rounded-full ${ESTILOS_ESTADO[registro.estado]?.punto ?? "bg-slate-300"}`}
+                          />
+                          <span className="text-slate-600">
+                            {ESTILOS_ESTADO[registro.estado]?.etiqueta ?? registro.estado}
+                          </span>
+                        </span>
+                      </td>
                     </tr>
                   ))}
                 </tbody>

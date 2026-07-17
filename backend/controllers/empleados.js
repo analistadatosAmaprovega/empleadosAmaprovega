@@ -1,9 +1,9 @@
-const pool = require("../database/db.js");
+const { pool: mariadb, postgres } = require("../database/db");
 const bcrypt = require('bcrypt');
 
 const motrarTodasTablas = async (req, res) => {
     try {
-        const [rows] = await pool.query('SHOW TABLES');
+        const [rows] = await mariadb.query('SHOW TABLES');
         res.json(rows);
 
     } catch (error) {
@@ -48,11 +48,47 @@ const motrarTodasTablas = async (req, res) => {
 //     }
 // };
 
+const crearTablaEmpleadosPG = async (req, res) => {
+
+    try {
+
+        await postgres.query(`
+            CREATE TABLE IF NOT EXISTS empleados (
+                id SERIAL PRIMARY KEY,
+                nombre VARCHAR(100) NOT NULL,
+                apellido VARCHAR(100) NOT NULL,
+                apodo VARCHAR(20),
+                flota VARCHAR(20),
+                cargo VARCHAR(100),
+                departamento VARCHAR(100),
+                estatus VARCHAR(20) DEFAULT 'activo'
+                    CHECK (estatus IN ('activo','inactivo','suspendido')),
+                usuario VARCHAR(50) UNIQUE NOT NULL,
+                password_hash VARCHAR(255),
+                fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            );
+        `);
+
+        res.json({
+            mensaje: "Tabla empleados creada correctamente"
+        });
+
+    } catch (error) {
+
+        console.error(error);
+
+        res.status(500).json({
+            mensaje: "Error al crear la tabla"
+        });
+
+    }
+
+};
 
 const crearTablaEmpleados = async (req, res) => {
     try {
         // 1. Verificar si la tabla existe
-        const [tabla] = await pool.query(`
+        const [tabla] = await mariadb.query(`
             SELECT COUNT(*) AS existe
             FROM information_schema.tables
             WHERE table_schema = DATABASE()
@@ -66,7 +102,7 @@ const crearTablaEmpleados = async (req, res) => {
         }
 
         // 2. Crear la tabla si no existe
-        await pool.query(`
+        await mariadb.query(`
     CREATE TABLE empleados (
         id INT AUTO_INCREMENT PRIMARY KEY,
         nombre VARCHAR(100) NOT NULL,
@@ -125,7 +161,7 @@ const crearEmpleado = async (req, res) => {
         const password_hash = await bcrypt.hash(password, saltRounds);
 
         // 4. Insertar en la base de datos pasándole la contraseña ya encriptada
-        const [resultado] = await pool.query(
+        const [resultado] = await mariadb.query(
             `INSERT INTO empleados
             (
                 nombre,
@@ -169,7 +205,7 @@ const obtenerEmpleados = async (req, res) => {
 
     try {
 
-        const [rows] = await pool.query(`
+        const [rows] = await mariadb.query(`
             SELECT *
             FROM empleados
             ORDER BY nombre
@@ -193,7 +229,7 @@ const obtenerUnEmpleado = async (req, res) => {
 
     try {
 
-        const [rows] = await pool.query(
+        const [rows] = await mariadb.query(
             `SELECT *
              FROM empleados
              WHERE id = ?`,
@@ -236,7 +272,7 @@ const actualizarEmpleado = async (req, res) => {
 
     try {
 
-        const [resultado] = await pool.query(
+        const [resultado] = await mariadb.query(
     `UPDATE empleados
      SET
         nombre = COALESCE(?, nombre),
@@ -279,7 +315,7 @@ const eliminarEmpleado = async (req, res) => {
 
     try {
 
-        const [resultado] = await pool.query(
+        const [resultado] = await mariadb.query(
             `DELETE FROM empleados
              WHERE id = ?`,
             [id]
@@ -312,7 +348,7 @@ const cambiarEstatusEmpleado = async (req, res) => {
 
     try {
 
-        const [rows] = await pool.query(
+        const [rows] = await mariadb.query(
             `SELECT estatus
              FROM empleados
              WHERE id = ?`,
@@ -340,7 +376,7 @@ const cambiarEstatusEmpleado = async (req, res) => {
                 nuevoEstatus = 'activo';
         }
 
-        await pool.query(
+        await mariadb.query(
             `UPDATE empleados
              SET estatus = ?
              WHERE id = ?`,
@@ -364,6 +400,7 @@ const cambiarEstatusEmpleado = async (req, res) => {
 
 
 module.exports = {
+    crearTablaEmpleadosPG,
     cambiarEstatusEmpleado,
     crearEmpleado,
     obtenerUnEmpleado,

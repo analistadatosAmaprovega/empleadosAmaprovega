@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-const pool = require('./database/db.js');
+const { mariadb, postgres } = require("./database/db");
 const { routerEmpleados } = require('./routes/empleados.js');
 const { crearTablaEmpleados } = require('./controllers/empleados.js');
 const { routerLlegadaEmpleados } = require('./routes/llegadaInicial.js');
@@ -50,14 +50,32 @@ app.listen(process.env.PORT, () => {
 //     });
 
 
-    pool.getConnection()
+mariadb.getConnection()
     .then(async conn => {
         const [result] = await conn.query('SELECT DATABASE() AS baseDatos');
-        console.log('Conectado a MariaDB');
-        console.log('DDBB:', result[0].baseDatos);
+        console.log('Conectado a MariaDB', 'DDBB:', result[0].baseDatos);
+        // console.log('DDBB:', result[0].baseDatos);
         conn.release();
     })
     .catch(err => {
         console.log('Error de conexión');
+        console.log(err);
+    });
+
+postgres.connect()
+    .then(async client => {
+
+        const result = await client.query(
+            "SELECT current_database() AS baseDatos"
+        );
+
+        console.log("Conectado a PostgreSQL", "DDBB:", result.rows[0].basedatos);
+        console.log("Conectado a PostgreSQL", "DDBB:", result);
+        // console.log("DDBB:", result.rows[0].basedatos);
+
+        client.release();
+
+    })
+    .catch(err => {
         console.log(err);
     });

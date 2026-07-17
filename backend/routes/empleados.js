@@ -3,6 +3,16 @@ const empleadosController = require('../controllers/empleados.js');
 
 const routerEmpleados = express.Router()
 
+
+routerEmpleados.post('/creartablaPG', empleadosController.crearTablaEmpleadosPG);
+
+
+
+
+
+
+
+
 routerEmpleados.post('/creartabla', empleadosController.crearTablaEmpleados);
 routerEmpleados.post('/nuevo', empleadosController.crearEmpleado);
 routerEmpleados.get('/', empleadosController.obtenerUnEmpleado);

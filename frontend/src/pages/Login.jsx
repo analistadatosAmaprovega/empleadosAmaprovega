@@ -7,43 +7,32 @@ function Login() {
   const [mensaje, setMensaje] = useState("");
   const [mostrarPassword, setMostrarPassword] = useState(false);
 
-  const iniciarSesion = async (e) => {
-    e.preventDefault();
-
-    try {
-      const respuesta = await fetch("http://localhost:3000/api/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          usuario,
-          password,
-        }),
-
-      });
-
-      const datos = await respuesta.json();
-
-      if (respuesta.ok) {
-        setMensaje("Inicio de sesión exitoso");
-        console.log(datos);
-
-  
-
-        
-
-
-
-
-      } else {
-        setMensaje(datos.mensaje);
-      }
-    } catch (error) {
-      console.error(error);
-      setMensaje("Error al conectar con el servidor.");
+const iniciarSesion = async (e) => {
+  e.preventDefault();
+  try {
+    const respuesta = await fetch("http://localhost:3000/login/inicioSession", {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        usuario,
+        password,
+      }),
+    });
+    const datos = await respuesta.json();
+    if (respuesta.ok) {
+      setMensaje("Inicio de sesión exitoso");
+      console.log(datos);
+    } else {
+      setMensaje(datos.mensaje);
     }
-  };
+  } catch (error) {
+    console.error(error);
+    setMensaje("Error al conectar con el servidor.");
+  }
+};
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-600 px-2">

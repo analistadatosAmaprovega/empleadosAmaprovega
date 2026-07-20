@@ -38,11 +38,11 @@ const mariadb = mysql.createPool({
 
 // PostgreSQL
 const postgres = new Pool({
-    host: "localhost",
-    port: 5432,
-    database: "amaprovegaPG",
-    user: "postgres",
-    password: "123456789"
+    host: process.env.PG_HOST,
+    port: Number(process.env.PG_PORT),
+    database: process.env.PG_DATABASE,
+    user: process.env.PG_USER,
+    password: process.env.PG_PASSWORD
 });
 
 module.exports = {

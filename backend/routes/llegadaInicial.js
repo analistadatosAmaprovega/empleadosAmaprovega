@@ -9,6 +9,12 @@ routerLlegadaEmpleados.post('/creartabla', llegadaInicial.crearTablaLlegadaInici
 routerLlegadaEmpleados.post('/nuevo', verifyToken, llegadaInicial.registrarLlegada);
 
 
+routerLlegadaEmpleados.post('/creartablaPG', llegadaInicial.crearTablaLlegadaInicialPG
+);
+
+routerLlegadaEmpleados.post('/nuevoPG', verifyToken, llegadaInicial.registrarLlegadaPG);
+
+routerLlegadaEmpleados.get('/verHoyPG', verifyToken, llegadaInicial.verLlegadasHoyPG);
 
 // routerLlegadaEmpleados.get('/', empleadosController.obtenerUnEmpleado);
 // routerLlegadaEmpleados.get('/:id', empleadosController.obtenerUnEmpleado);

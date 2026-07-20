@@ -1,4 +1,4 @@
-const { pool: mariadb, postgres } = require("../database/db");
+const { mariadb, postgres } = require("../database/db.js");
 const bcrypt = require('bcrypt');
 
 const motrarTodasTablas = async (req, res) => {
@@ -201,6 +201,101 @@ const crearEmpleado = async (req, res) => {
     }
 };
 
+const crearEmpleadoPG = async (req, res) => {
+    const {
+        nombre,
+        apellido,
+        apodo,
+        flota,
+        cargo,
+        departamento,
+        estatus,
+        usuario,
+        password
+    } = req.body;
+
+    if (!nombre || !apellido || !password) {
+        return res.status(400).json({
+            mensaje: 'Nombre, apellido y contraseña son requeridos'
+        });
+    }
+
+    const estatusValidos = ['activo', 'inactivo', 'suspendido'];
+    const estatusFinal = estatusValidos.includes(estatus) ? estatus : 'activo';
+
+    try {
+        // 3. Cifrar la contraseña usando un factor de costo (saltRounds) de 10
+        const saltRounds = 10;
+        const password_hash = await bcrypt.hash(password, saltRounds);
+
+        // 4. Insertar en la base de datos usando marcadores de posición de PostgreSQL ($1, $2...)
+        // Añadimos RETURNING id para obtener el ID generado inmediatamente
+        const queryText = `
+            INSERT INTO empleados
+            (
+                nombre,
+                apellido,
+                apodo,
+                flota,
+                cargo,
+                departamento,
+                estatus,
+                usuario,
+                password_hash
+            )
+            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+            RETURNING id
+        `;
+
+        const valores = [
+            nombre,
+            apellido,
+            apodo,
+            flota,
+            cargo,
+            departamento,
+            estatusFinal,
+            usuario,
+            password_hash
+        ];
+
+        // Ejecutamos con tu cliente/pool de PostgreSQL (ej. db.query o pool.query)
+        const resultado = await postgres.query(queryText, valores);
+
+        // El resultado de RETURNING id viene en el primer elemento de rows
+        return res.json({
+            mensaje: 'Empleado creado exitosamente',
+            id: resultado.rows[0].id
+        });
+
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({
+            mensaje: 'Error al crear empleado'
+        });
+    }
+};
+
+const obtenerEmpleadosPG = async (req, res) => {
+    try {
+        // 1. Ejecutamos la consulta usando la conexión de PostgreSQL
+        const resultado = await postgres.query(`
+            SELECT *
+            FROM empleados
+            ORDER BY nombre
+        `);
+
+        // 2. Enviamos las filas que vienen dentro de resultado.rows
+        return res.json(resultado.rows);
+
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({
+            mensaje: 'Error al obtener empleados'
+        });
+    }
+};
+
 const obtenerEmpleados = async (req, res) => {
 
     try {
@@ -210,6 +305,7 @@ const obtenerEmpleados = async (req, res) => {
             FROM empleados
             ORDER BY nombre
         `);
+
 
         res.json(rows);
 
@@ -249,7 +345,7 @@ const obtenerUnEmpleado = async (req, res) => {
         console.log(error);
 
         res.status(500).json({
-            mensaje: 'Error al obtener empleado'
+            mensaje: 'Error al obtener empleadosss'
         });
     }
 };
@@ -342,6 +438,40 @@ const eliminarEmpleado = async (req, res) => {
 };
 
 
+
+const eliminarEmpleadoPG = async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        // 1. Cambiamos el "?" por "$1" para PostgreSQL
+        const queryText = `
+            DELETE FROM empleados
+            WHERE id = $1
+        `;
+
+        // 2. Ejecutamos la consulta usando tu cliente o pool de postgres (ej. db o pool)
+        const resultado = await postgres.query(queryText, [id]);
+
+        // 3. En PostgreSQL usamos "rowCount" para verificar cuántas filas fueron afectadas
+        if (resultado.rowCount === 0) {
+            return res.status(404).json({
+                mensaje: 'Empleado no encontrado'
+            });
+        }
+
+        return res.json({
+            mensaje: 'Empleado eliminado correctamente'
+        });
+
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({
+            mensaje: 'Error al eliminar empleado'
+        });
+    }
+};
+
+
 const cambiarEstatusEmpleado = async (req, res) => {
 
     const { id } = req.params;
@@ -401,9 +531,12 @@ const cambiarEstatusEmpleado = async (req, res) => {
 
 module.exports = {
     crearTablaEmpleadosPG,
+    crearEmpleadoPG,
+    eliminarEmpleadoPG,
+    obtenerEmpleadosPG,
     cambiarEstatusEmpleado,
     crearEmpleado,
-    obtenerUnEmpleado,
+    obtenerEmpleados,
     obtenerUnEmpleado,
     actualizarEmpleado,
     eliminarEmpleado,

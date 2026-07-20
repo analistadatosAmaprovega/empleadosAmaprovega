@@ -9,8 +9,30 @@ const cookieParser = require('cookie-parser');
 const { routerLogin } = require('./routes/login.js');
 
 const app = express();
+const origenesPermitidos = [
+  "http://localhost:5173",
+  "http://10.0.0.11:5173",   // IP de tu compu en la red local
+  "http://10.0.0.11:5173/",  // otra IP si aplica
+];
 
-app.use(cors());
+app.use(cors({
+  origin: function (origin, callback) {
+    // Permite peticiones sin origin (Postman, curl, apps móviles nativas)
+    if (!origin || origenesPermitidos.includes(origin)) {
+      callback(null, origin);
+    } else {
+      callback(new Error("No permitido por CORS"));
+    }
+  },
+  credentials: true
+}));
+// app.use(cors({
+//     origin: "http://localhost:5173",
+
+//         origin: "*",
+
+//     credentials: true
+// }));
 app.use(express.json());
 app.use(cookieParser());
 
@@ -27,8 +49,12 @@ app.get('/a', (req, res) => {
     res.send('Bienvenido a la ruta /a');
 });
 
-app.listen(process.env.PORT, () => {
-    console.log(`Servidor corriendo en puerto ${process.env.PORT}`);
+// app.listen(process.env.PORT, () => {
+//     console.log(`Servidor corriendo en puerto ${process.env.PORT}`);
+// });
+
+app.listen(3000, "0.0.0.0", () => {
+  console.log("Servidor corriendo en el puerto 3000");
 });
 
 
@@ -70,7 +96,7 @@ postgres.connect()
         );
 
         console.log("Conectado a PostgreSQL", "DDBB:", result.rows[0].basedatos);
-        console.log("Conectado a PostgreSQL", "DDBB:", result);
+        // console.log("Conectado a PostgreSQL", "DDBB:", result);
         // console.log("DDBB:", result.rows[0].basedatos);
 
         client.release();

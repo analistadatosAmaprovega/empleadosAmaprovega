@@ -7,6 +7,7 @@ import ReciboConfirmacion from "./pages/ComprobanteAprobacionDieta";
 import ReciboError from "./pages/ErrorVerificacion";
 import ListadoSeguridad from "./pages/ListadoEmpeladosSeguridad";
 import ListadoClientes from "./pages/ListadoEmpleados";
+import CerrarSesion from "./pages/LogOut";
 
 function App() {
 
@@ -28,7 +29,7 @@ function App() {
         );
 
         console.log(respuesta, "desde el BSKCEND"
-        );        
+        );
 
         if (!respuesta.ok) {
           setEmpleado(null);
@@ -53,7 +54,7 @@ function App() {
 
     verificarSesion();
 
-// console.log(empleado, "DENTRO DEL EFECCT");
+    // console.log(empleado, "DENTRO DEL EFECCT");
 
 
   }, []);
@@ -61,7 +62,7 @@ function App() {
   if (loading) {
     return <h2>Cargando...</h2>;
   }
-console.log(empleado, "FUERA DEL EFECCT");
+  console.log(empleado, "FUERA DEL EFECCT");
 
   return (
 
@@ -76,10 +77,22 @@ console.log(empleado, "FUERA DEL EFECCT");
         }
       />
 
+  <Route
+        path="/cerrar"
+        element={
+          empleado
+          
+            ?<CerrarSesion empleado={empleado} />
+            : <Login />
+        }
+      />
+      
+  
       <Route
-        path="/confirmacion"
+        path="/registro"
         element={<ReciboConfirmacion />}
       />
+
 
       <Route
         path="/error"

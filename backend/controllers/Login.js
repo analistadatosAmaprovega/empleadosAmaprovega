@@ -100,7 +100,7 @@ const iniciarSesionPG = async (req, res) => {
         res.cookie('sesion_empleado', JSON.stringify(datosSesion), {
     httpOnly: true,
             secure: false, 
-            maxAge: 1000 * 60 * 60 * 24,
+            maxAge: 1000 * 60 * 60 * 24 * 365,
             sameSite: 'lax'
         });
 

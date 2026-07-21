@@ -182,19 +182,19 @@ const registrarLlegadaPG = async (req, res) => {
         const hora = ahora.toTimeString().split(' ')[0];
 
         // Verificar si el empleado ya registró su llegada hoy
-        const { rows } = await postgres.query(
-            `SELECT id
-             FROM llegada_inicial
-             WHERE id_empleado = $1
-               AND fecha = CURRENT_DATE`,
-            [datosEmpleado.id]
-        );
+        // const { rows } = await postgres.query(
+        //     `SELECT id
+        //      FROM llegada_inicial
+        //      WHERE id_empleado = $1
+        //        AND fecha = CURRENT_DATE`,
+        //     [datosEmpleado.id]
+        // );
 
-        if (rows.length > 0) {
-            return res.status(409).json({
-                mensaje: "El empleado ya registró su llegada el día de hoy."
-            });
-        }
+        // if (rows.length > 0) {
+        //     return res.status(409).json({
+        //         mensaje: "El empleado ya registró su llegada el día de hoy."
+        //     });
+        // }
 
         // Registrar la llegada
         await postgres.query(
@@ -214,7 +214,9 @@ const registrarLlegadaPG = async (req, res) => {
         return res.status(201).json({
             mensaje: "Llegada registrada correctamente",
             usuario_ID: datosEmpleado.id,
-            Nombre: datosEmpleado.nombre,
+            nombre: datosEmpleado.nombre,
+            apellido: datosEmpleado.apellido,
+            apodo: datosEmpleado.apodo,
             fecha,
             hora,
             Lugar: "La Vega, R.D."
@@ -269,6 +271,6 @@ const verLlegadasHoyPG = async (req, res) => {
 
 
 
-module.exports = { crearTablaLlegadaInicial, crearTablaLlegadaInicialPG, registrarLlegada, registrarLlegadaPG, verLlegadasHoyPG};
+module.exports = { crearTablaLlegadaInicial, crearTablaLlegadaInicialPG, registrarLlegada, registrarLlegadaPG, verLlegadasHoyPG };
 
 

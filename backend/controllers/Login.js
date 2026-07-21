@@ -33,6 +33,7 @@ const iniciarSesion = async (req, res) => {
         const datosSesion = {
             id: empleado.id,
             nombre: empleado.nombre,
+            apellido: empleado.apellido,
             usuario: empleado.usuario,
             cargo: empleado.cargo
         };
@@ -90,6 +91,8 @@ const iniciarSesionPG = async (req, res) => {
         const datosSesion = {
             id: empleado.id,
             nombre: empleado.nombre,
+            apellido: empleado.apellido,
+            apodo: empleado.apodo,
             usuario: empleado.usuario,
             cargo: empleado.cargo
         };
@@ -152,6 +155,8 @@ const verificarUsuario = (req, res) => {
             empleado: {
                 id: empleado.id,
                 nombre: empleado.nombre,
+                apellido: empleado.apellido,
+                apodo: empleado.apodo,
                 usuario: empleado.usuario,
                 cargo: empleado.cargo
             }

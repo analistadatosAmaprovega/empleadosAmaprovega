@@ -1,7 +1,9 @@
 import logo from "./../../public/icono.png";
 import { Info } from "lucide-react";
 
-export default function BienvenidaQR() {
+export default function BienvenidaQR({empleado}) {
+    // console.log(empleado);
+    
     return (
         <div className="min-h-screen bg-slate-600 flex items-center justify-center p-4 sm:p-6">
             <div className="w-full max-w-4xl bg-white rounded-2xl shadow-2xl px-6 py-8 sm:px-10 sm:py-10">
@@ -21,11 +23,23 @@ export default function BienvenidaQR() {
                 </h1>
 
                 {/* Texto */}
-                <p className="mt-5 text-center text-slate-600 leading-relaxed max-w-3xl mx-auto text-base sm:text-lg md:text-2xl">
-                    Para solicitar la dieta, favor, entrar a la cámara del dispositivo, escanea el código QR en el lugar
-                    indicado por el departamento de Recursos Humanos.
-                </p>
+            <div className="mt-6 text-center">
+<div className="text-center">
+  <h2 className="text-2xl md:text-4xl font-bold text-slate-800">
+    {empleado.nombre} {empleado.apellido}
+  </h2>
 
+  {empleado.apodo && (
+    <p className="mt-1 text-base md:text-lg italic text-slate-500">
+      ({empleado.apodo})
+    </p>
+  )}
+</div>
+
+<p className="mt-2 text-sm md:text-base uppercase tracking-wider text-slate-400">
+  {empleado.cargo}
+</p>
+</div>
                 {/* QR */}
                 <div className="flex justify-center mt-8 sm:mt-10">
 
@@ -73,7 +87,7 @@ export default function BienvenidaQR() {
                     </div>
 
                     <p className="text-slate-700 leading-relaxed text-sm sm:text-base md:text-xl">
-                        Asegúrate de estar en el área indicada por Recursos Humanos
+                        Asegúrate de estar en el área indicada
                         para realizar el escaneo del código QR.
                     </p>
 

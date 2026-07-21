@@ -30,7 +30,7 @@ function App() {
         console.log(respuesta, "desde el BSKCEND"
         );        
 
-        if (respuesta.ok===false) {
+        if (!respuesta.ok) {
           setEmpleado(null);
           return;
         }
@@ -46,16 +46,14 @@ function App() {
         setEmpleado(null);
 
       } finally {
-
         setLoading(false);
-
       }
 
     };
 
     verificarSesion();
 
-console.log(empleado, "DENTRO DEL EFECCT");
+// console.log(empleado, "DENTRO DEL EFECCT");
 
 
   }, []);

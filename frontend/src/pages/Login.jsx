@@ -9,22 +9,31 @@ function Login() {
 
 const iniciarSesion = async (e) => {
   e.preventDefault();
+
   try {
-    const respuesta = await fetch("http://localhost:3000/login/inicioSession", {
-      method: "POST",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        usuario,
-        password,
-      }),
-    });
+    const respuesta = await fetch(
+      "http://localhost:3000/login/inicioSessionPG",
+      {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          usuario,
+          password,
+        }),
+      }
+    );
+
     const datos = await respuesta.json();
+
     if (respuesta.ok) {
       setMensaje("Inicio de sesión exitoso");
       console.log(datos);
+
+      // Solo si inició sesión correctamente
+      window.location.reload();
     } else {
       setMensaje(datos.mensaje);
     }

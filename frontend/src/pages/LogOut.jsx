@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { Building2, LogOut } from "lucide-react";
+import { API_URL } from "../../config.js"; 
+
 
 function CerrarSesion({empleado}) {
   const [mensaje, setMensaje] = useState("");
@@ -7,7 +9,7 @@ function CerrarSesion({empleado}) {
   const cerrarSesion = async () => {
     try {
       const respuesta = await fetch(
-        "http://localhost:3000/login/cerrarSession",
+`${ API_URL }/login/cerrarSession`,
         {
           method: "POST",
           credentials: "include",

@@ -9,6 +9,9 @@ import ListadoSeguridad from "./pages/ListadoEmpeladosSeguridad";
 import ListadoClientes from "./pages/ListadoEmpleados";
 import CerrarSesion from "./pages/LogOut";
 
+import { API_URL } from "../config.js"; 
+
+
 function App() {
 
   const [loading, setLoading] = useState(true);
@@ -21,7 +24,7 @@ function App() {
       try {
 
         const respuesta = await fetch(
-          "http://localhost:3000/login/verificarUsuario",
+          `${ API_URL }/login/verificarUsuario`,
           {
             method: "GET",
             credentials: "include"

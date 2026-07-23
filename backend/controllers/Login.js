@@ -1,5 +1,6 @@
 const bcrypt = require('bcrypt');
 const { mariadb, postgres } = require("../database/db.js");
+const produccion = process.env.NODE_ENV === "production";
 
 const iniciarSesion = async (req, res) => {
     try {
@@ -24,6 +25,8 @@ const iniciarSesion = async (req, res) => {
             return res.status(403).json({ mensaje: 'El usuario no está activo en el sistema' });
         }
 
+
+
         const passwordCorrecto = await bcrypt.compare(password, empleado.password_hash);
 
         if (!passwordCorrecto) {
@@ -38,11 +41,13 @@ const iniciarSesion = async (req, res) => {
             cargo: empleado.cargo
         };
 
+
         res.cookie('sesion_empleado', JSON.stringify(datosSesion), {
             httpOnly: true,
-            secure: false, 
-            maxAge: 1000 * 60 * 60 * 24,
-            sameSite: 'lax'
+            secure: produccion,
+            sameSite: produccion ? "none" : "lax",
+            maxAge: 1000 * 60 * 60 * 24 * 365,
+
         });
 
         return res.json({
@@ -98,10 +103,11 @@ const iniciarSesionPG = async (req, res) => {
         };
 
         res.cookie('sesion_empleado', JSON.stringify(datosSesion), {
-    httpOnly: true,
-            secure: false, 
+            httpOnly: true,
+            secure: produccion,
+            sameSite: produccion ? "none" : "lax",
             maxAge: 1000 * 60 * 60 * 24 * 365,
-            sameSite: 'lax'
+
         });
 
         return res.json({
@@ -198,7 +204,7 @@ const cerrarSesion = async (req, res) => {
         return res.status(200).json({
             mensaje: 'Sesión cerrada correctamente. Cookie eliminada del navegador.',
             datosEliminados: datosEmpleado
-        }); 
+        });
 
     } catch (error) {
         console.error('Error al cerrar sesión:', error);
@@ -215,7 +221,7 @@ module.exports = {
     iniciarSesion,
     iniciarSesionPG,
     verificarSesion,
-    cerrarSesion, 
+    cerrarSesion,
     verificarUsuario
 };
 

@@ -1,40 +1,45 @@
+
+require("dotenv").config();
 const express = require('express');
 const cors = require('cors');
 const { mariadb, postgres } = require("./database/db");
 const { routerEmpleados } = require('./routes/empleados.js');
 const { crearTablaEmpleados } = require('./controllers/empleados.js');
 const { routerLlegadaEmpleados } = require('./routes/llegadaInicial.js');
-require('dotenv').config();
 const cookieParser = require('cookie-parser');
 const { routerLogin } = require('./routes/login.js');
 
 const app = express();
+
 const origenesPermitidos = [
-  "http://localhost:5173",
-  "http://10.0.0.11:5173",   // IP de tu compu en la red local
-  "http://10.0.0.11:5173/",  // otra IP si aplica
+  process.env.ORIGIN1,
+  process.env.ORIGIN2, 
+  process.env.ORIGIN3,  
 ];
 
-app.use(cors({
-  origin: function (origin, callback) {
-    // Permite peticiones sin origin (Postman, curl, apps móviles nativas)
-    if (!origin || origenesPermitidos.includes(origin)) {
-      callback(null, origin);
-    } else {
-      callback(new Error("No permitido por CORS"));
-    }
-  },
-  credentials: true
-}));
 // app.use(cors({
-//     origin: "http://localhost:5173",
-
-//         origin: "*",
-
-//     credentials: true
+//   origin: function (origin, callback) {
+//     if (!origin || origenesPermitidos.includes(origin)) {
+//       callback(null, origin);
+//     } else {
+//       callback(new Error("No permitido por CORS"));
+//     }
+//   },
+//   credentials: true
 // }));
+
+
+app.use(cors({
+    origin: process.env.FRONTEND_URL,
+    credentials: true
+}));
+
+console.log(process.env.FRONTEND_URL);
+
+
 app.use(express.json());
 app.use(cookieParser());
+
 
 
 app.use("/empleados", routerEmpleados)
@@ -49,31 +54,11 @@ app.get('/a', (req, res) => {
     res.send('Bienvenido a la ruta /a');
 });
 
-// app.listen(process.env.PORT, () => {
-//     console.log(`Servidor corriendo en puerto ${process.env.PORT}`);
-// });
-
-app.listen(3000, "0.0.0.0", () => {
-  console.log("Servidor corriendo en el puerto 3000");
+app.listen(process.env.PORT, () => {
+    console.log(`Servidor corriendo en puerto -> ${process.env.PORT}`);
 });
 
 
-
-
-// pool.getConnection()
-//     .then(conn => {
-//         conn.query('SELECT DATABASE() AS baseDatos', (err, result) => {
-//             if (!err) {
-//                 //    console.log('Conectado a MariaDB');            
-//                 console.log('Base de datos:', result[0].baseDatos);
-//             }
-//             conn.release();
-//         });
-//     })
-//     .catch(err => {
-//         console.log('Error de conexión');
-//         console.log(err);
-//     });
 
 
 mariadb.getConnection()
@@ -105,3 +90,11 @@ postgres.connect()
     .catch(err => {
         console.log(err);
     });
+
+app.use((err, req, res, next) => {
+    console.error(err);
+
+    res.status(500).json({
+        mensaje: "Error interno"
+    });
+});

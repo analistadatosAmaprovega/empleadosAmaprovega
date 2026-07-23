@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { API_URL } from "../../config.js";
 
 const DATOS_PRUEBA = {
     fecha: "15 de julio, 2026",
@@ -18,7 +19,7 @@ function IconoCheck() {
             stroke="currentColor"
             strokeWidth={3}
         >
-        const [visible] = useState(true);    <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+            const [visible] = useState(true);    <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
         </svg>
     );
 }
@@ -41,24 +42,29 @@ function Fila({ etiqueta, valor, destacado }) {
 }
 
 export default function ReciboConfirmacion() {
- const [visible] = useState(true);
+    const [visible] = useState(true);
     const [empleado, setEmpleado] = useState(null);
     const [cargando, setCargando] = useState(true);
-const navigate = useNavigate();
+    console.log(empleado);
+    
+    const navigate = useNavigate();
     useEffect(() => {
         const obtenerEmpleado = async () => {
             try {
                 const respuesta = await fetch(
-                    "http://localhost:3000/registroLlegada/nuevoPG",
+
+                    `${API_URL}/registroLlegada/nuevoPG`,
                     {
                         method: "POST",
                         credentials: "include",
                     }
                 );
-   if (respuesta.status === 401) {
-                navigate("/error", { replace: true });
-                return;
-            }
+                console.log(respuesta);
+                
+                if (respuesta.status === 401) {
+                    navigate("/error", { replace: true });
+                    return;
+                }
 
                 const datos = await respuesta.json();
 
@@ -115,8 +121,8 @@ const navigate = useNavigate();
 
                     <div className="border-t border-dashed border-slate-300 my-4" />
 
-<p className="text-center font-semibold text-green-800">      
-                      Guarda esta pantalla como comprobante
+                    <p className="text-center font-semibold text-green-800">
+                        Guarda esta pantalla como comprobante
                     </p>
                 </div>
             </div>

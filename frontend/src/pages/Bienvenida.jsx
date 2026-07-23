@@ -87,8 +87,7 @@ export default function BienvenidaQR({empleado}) {
                     </div>
 
                     <p className="text-slate-700 leading-relaxed text-sm sm:text-base md:text-xl">
-                        Asegúrate de estar en el área indicada
-                        para realizar el escaneo del código QR.
+                        Escanea el QR, para solicitar el pago de tu dieta.
                     </p>
 
                 </div>

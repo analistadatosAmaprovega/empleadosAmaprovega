@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { API_URL } from "../../config.js";
 
 export default function ListadoSeguridad() {
     const [registros, setRegistros] = useState([]);
@@ -8,7 +9,7 @@ export default function ListadoSeguridad() {
         const obtenerRegistros = async () => {
             try {
                 const respuesta = await fetch(
-                    "http://localhost:3000/registroLlegada/verHoyPG",
+                    `${API_URL}/registroLlegada/verHoyPG`,
                     {
                         credentials: "include",
                     }
@@ -100,7 +101,7 @@ export default function ListadoSeguridad() {
                                         }
                                     >
                                         <td className="px-4 py-3 border-b text-left">
-                                            {registro.id_empleado} 
+                                            {registro.id_empleado}
                                         </td>
 
                                         <td className="px-4 py-3 font-semibold border-b text-left">
@@ -118,8 +119,8 @@ export default function ListadoSeguridad() {
                                             <button
                                                 onClick={() => cambiarEstado(registro.id)}
                                                 className={`px-4 py-2 rounded-lg font-semibold text-white transition-all duration-300 ${registro.pagado
-                                                        ? "bg-green-700 hover:bg-green-800"
-                                                        : "bg-orange-400 hover:bg-orange-500"
+                                                    ? "bg-green-700 hover:bg-green-800"
+                                                    : "bg-orange-400 hover:bg-orange-500"
                                                     }`}
                                             >
                                                 {registro.pagado ? "Pagado" : "Pendiente"}

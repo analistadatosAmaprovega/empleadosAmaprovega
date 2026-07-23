@@ -1,5 +1,8 @@
 import { useState } from "react";
 import { Eye, EyeOff, Building2 } from "lucide-react";
+import { API_URL } from "../../config.js"; 
+// `${ API_URL }/login/inicioSessionPG`,
+
 
 function Login() {
   const [usuario, setUsuario] = useState("");
@@ -9,10 +12,9 @@ function Login() {
 
 const iniciarSesion = async (e) => {
   e.preventDefault();
-
   try {
     const respuesta = await fetch(
-      "http://localhost:3000/login/inicioSessionPG",
+      `${ API_URL }/login/inicioSessionPG`,
       {
         method: "POST",
         credentials: "include",

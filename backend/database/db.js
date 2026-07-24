@@ -20,17 +20,22 @@ const mariadb = mysql.createPool({
 }).promise();
 
 // PostgreSQL
+// const postgres = new Pool({
+//     host: process.env.PG_HOST,
+//     port: Number(process.env.PG_PORT),
+//     database: process.env.PG_DATABASE,
+//     user: process.env.PG_USER,
+//     password: String(process.env.PG_PASSWORD),
+//        ssl: process.env.NODE_ENV === "production" 
+//         ? { rejectUnauthorized: false } 
+//         : false
+// });
 const postgres = new Pool({
-    host: process.env.PG_HOST,
-    port: Number(process.env.PG_PORT),
-    database: process.env.PG_DATABASE,
-    user: process.env.PG_USER,
-    password: String(process.env.PG_PASSWORD),
-       ssl: process.env.NODE_ENV === "production" 
+    connectionString: process.env.DATABASE_URL,
+    ssl: process.env.NODE_ENV === "production" 
         ? { rejectUnauthorized: false } 
-        : false
+        : true
 });
-
 module.exports = {
     mariadb,
     postgres

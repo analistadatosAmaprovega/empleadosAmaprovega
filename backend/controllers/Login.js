@@ -194,10 +194,17 @@ const cerrarSesion = async (req, res) => {
 
 
     try {
+        // res.clearCookie('sesion_empleado', {
+        //     httpOnly: true,
+        //     // secure: process.env.NODE_ENV === 'production',
+        //     sameSite: 'lax',
+        // });
+
         res.clearCookie('sesion_empleado', {
             httpOnly: true,
-            // secure: process.env.NODE_ENV === 'production',
-            sameSite: 'lax'
+            secure: true,
+            sameSite: 'none',
+            path: '/'
         });
 
 

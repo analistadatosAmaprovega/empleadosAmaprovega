@@ -12,7 +12,7 @@ routerLlegadaEmpleados.post('/nuevo', verifyToken, llegadaInicial.registrarLlega
 routerLlegadaEmpleados.post('/creartablaPG', llegadaInicial.crearTablaLlegadaInicialPG
 );
 
-routerLlegadaEmpleados.get('/nuevoPG', verifyToken, llegadaInicial.registrarLlegadaPG);
+routerLlegadaEmpleados.post('/nuevoPG', verifyToken, llegadaInicial.registrarLlegadaPG);
 
 routerLlegadaEmpleados.get('/verHoyPG', verifyToken, llegadaInicial.verLlegadasHoyPG);
 

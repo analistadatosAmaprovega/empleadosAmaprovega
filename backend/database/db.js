@@ -10,7 +10,7 @@ console.log({
 });
 
 
-MariaDB
+// MariaDB
 const mariadb = mysql.createPool({
     host: process.env.DB_HOST,
     user: process.env.DB_USER,

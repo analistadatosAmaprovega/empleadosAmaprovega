@@ -1,8 +1,26 @@
 import { useState } from "react";
 
-const DATOS_PRUEBA = {
-  fecha: "15 de julio, 2026",
-  hora: "08:03 AM",
+function generarFechaHoraActual() {
+  const ahora = new Date();
+
+  const dia = String(ahora.getDate()).padStart(2, "0");
+  const mes = String(ahora.getMonth() + 1).padStart(2, "0");
+  const anio = ahora.getFullYear();
+  const fecha = `${dia}/${mes}/${anio}`;
+
+  let horas = ahora.getHours();
+  const minutos = String(ahora.getMinutes()).padStart(2, "0");
+  const segundos = String(ahora.getSeconds()).padStart(2, "0");
+  const ampm = horas >= 12 ? "PM" : "AM";
+  horas = horas % 12;
+  horas = horas === 0 ? 12 : horas;
+  const hora = `${String(horas).padStart(2, "0")}:${minutos}:${segundos} ${ampm}`;
+
+  return { fecha, hora };
+}
+
+const TIEMPO = {
+  ...generarFechaHoraActual(),
   estadoSolicitud: "Rechazada",
 };
 
@@ -37,7 +55,9 @@ function Fila({ etiqueta, valor, destacado }) {
   );
 }
 
-export default function ReciboError({ datos = DATOS_PRUEBA }) {
+
+
+export default function ReciboError({ datos = TIEMPO }) {
   const [visible] = useState(true);
 
   if (!visible) return null;

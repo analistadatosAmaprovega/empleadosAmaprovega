@@ -9,7 +9,7 @@ import ListadoSeguridad from "./pages/ListadoEmpeladosSeguridad";
 import ListadoClientes from "./pages/ListadoEmpleados";
 import CerrarSesion from "./pages/LogOut";
 
-import { API_URL } from "../config.js"; 
+import { API_URL } from "../config.js";
 
 
 function App() {
@@ -24,7 +24,7 @@ function App() {
       try {
 
         const respuesta = await fetch(
-          `${ API_URL }/login/verificarUsuario`,
+          `${API_URL}/login/verificarUsuario`,
           {
             method: "GET",
             credentials: "include"
@@ -80,17 +80,17 @@ function App() {
         }
       />
 
-  <Route
+      <Route
         path="/cerrar"
         element={
           empleado
-          
-            ?<CerrarSesion empleado={empleado} />
+
+            ? <CerrarSesion empleado={empleado} />
             : <Login />
         }
       />
-      
-  
+
+
       <Route
         path="/registro"
         element={<ReciboConfirmacion />}

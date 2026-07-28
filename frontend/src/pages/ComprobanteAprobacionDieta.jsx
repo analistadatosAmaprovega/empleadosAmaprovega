@@ -1,20 +1,6 @@
-
-
-
-
-
-
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { API_URL } from "../../config.js";
-
-const DATOS_PRUEBA = {
-    fecha: "15 de julio, 2026",
-    hora: "08:03 AM",
-    idSolicitud: "SOL-2026-004821",
-    nombreColaborador: "María Rodríguez",
-    estatus: "Confirmado",
-};
 
 function IconoCheck() {
     return (

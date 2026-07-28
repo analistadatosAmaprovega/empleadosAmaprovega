@@ -270,7 +270,37 @@ const verLlegadasHoyPG = async (req, res) => {
 };
 
 
+const verLlegadasTodasPG = async (req, res) => {
 
-module.exports = { crearTablaLlegadaInicial, crearTablaLlegadaInicialPG, registrarLlegada, registrarLlegadaPG, verLlegadasHoyPG };
+    try {
+
+        const { rows } = await postgres.query(
+            `SELECT
+                id,
+                id_empleado,
+                nombre,
+                fecha,
+                hora,
+                location
+             FROM llegada_inicial
+             ORDER BY hora DESC`
+        );
+
+        return res.status(200).json({
+            mensaje: "Registros desde siempre obtenidos correctamente",
+            total: rows.length,
+            registros: rows
+        });
+
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({
+            mensaje: "Error al obtener los registros de hoy"
+        });
+    }
+};
+
+
+module.exports = { crearTablaLlegadaInicial, crearTablaLlegadaInicialPG, registrarLlegada, registrarLlegadaPG, verLlegadasHoyPG, verLlegadasTodasPG };
 
 

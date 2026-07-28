@@ -16,6 +16,9 @@ routerLlegadaEmpleados.post('/nuevoPG', verifyToken, llegadaInicial.registrarLle
 
 routerLlegadaEmpleados.get('/verHoyPG', verifyToken, llegadaInicial.verLlegadasHoyPG);
 
+routerLlegadaEmpleados.get('/verTodoPG', verifyToken, llegadaInicial.verLlegadasTodasPG);
+
+
 // routerLlegadaEmpleados.get('/', empleadosController.obtenerUnEmpleado);
 // routerLlegadaEmpleados.get('/:id', empleadosController.obtenerUnEmpleado);
 // routerLlegadaEmpleados.post('/', empleadosController.crearEmpleado);

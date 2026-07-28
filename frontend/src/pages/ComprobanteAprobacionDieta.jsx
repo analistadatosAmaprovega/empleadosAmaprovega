@@ -44,10 +44,9 @@ export default function ReciboConfirmacion() {
     const navigate = useNavigate();
     useEffect(() => {
         const obtenerEmpleado = async () => {
-            const DURACION_MS = 60 * 1000; // 1 minuto
+            const DURACION_MS = 0.25 * 60 * 1000; 
         const tokenTimestamp = Number(token);
 
-        // Si el token no es un número válido, o ya pasó más de 1 minuto, no hacer fetch
         if (!tokenTimestamp || isNaN(tokenTimestamp) || Date.now() - tokenTimestamp > DURACION_MS) {
             navigate("/expirado", { replace: true });
             setCargando(false);

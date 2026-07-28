@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { API_URL } from "../../config.js";
 
 function IconoCheck() {
@@ -11,7 +11,7 @@ function IconoCheck() {
             stroke="currentColor"
             strokeWidth={3}
         >
-            const [visible] = useState(true);    <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+         <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
         </svg>
     );
 }
@@ -38,10 +38,22 @@ export default function ReciboConfirmacion() {
     const [empleado, setEmpleado] = useState(null);
     const [cargando, setCargando] = useState(true);
     console.log(empleado);
+    const { token } = useParams();
+  console.log(token)
     
     const navigate = useNavigate();
     useEffect(() => {
         const obtenerEmpleado = async () => {
+            const DURACION_MS = 60 * 1000; // 1 minuto
+        const tokenTimestamp = Number(token);
+
+        // Si el token no es un número válido, o ya pasó más de 1 minuto, no hacer fetch
+        if (!tokenTimestamp || isNaN(tokenTimestamp) || Date.now() - tokenTimestamp > DURACION_MS) {
+            navigate("/expirado", { replace: true });
+            setCargando(false);
+            return;
+        }
+
             try {
                 const respuesta = await fetch(
 

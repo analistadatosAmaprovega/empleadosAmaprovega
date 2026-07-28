@@ -11,9 +11,8 @@ export default function ListadoSeguridad() {
     const [segundosRestantes, setSegundosRestantes] = useState(DURACION_MS / 1000);
 
     const generarNuevoQR = () => {
-        const token = crypto.randomUUID();
-        const timestamp = Date.now();
-        setUrlQR(`${API_URL}/registro?token=${token}&t=${timestamp}`);
+       const timestamp = Date.now();
+        setUrlQR(`${"https://empleadosamaprovega.onrender.com"}/registro/${timestamp}`);
         setSegundosRestantes(DURACION_MS / 1000);
     };
 

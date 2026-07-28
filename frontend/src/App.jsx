@@ -10,6 +10,7 @@ import ListadoClientes from "./pages/ListadoEmpleados";
 import CerrarSesion from "./pages/LogOut";
 
 import { API_URL } from "../config.js";
+import ReciboQRExpirado from "./pages/QrExpirado.jsx";
 
 
 function App() {
@@ -90,12 +91,10 @@ function App() {
         }
       />
 
-
       <Route
-        path="/registro"
+        path="/registro/:token"
         element={<ReciboConfirmacion />}
       />
-
 
       <Route
         path="/error"
@@ -110,6 +109,11 @@ function App() {
       <Route
         path="/empleados"
         element={<ListadoClientes />}
+      />
+
+      <Route
+        path="/expirado"
+        element={<ReciboQRExpirado />}
       />
 
     </Routes>

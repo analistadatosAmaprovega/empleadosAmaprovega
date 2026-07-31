@@ -6,6 +6,7 @@ const DURACION_MS = (0.25 * 60 * 1000); // 10 minutos
 
 export default function ListadoSeguridad() {
     const [registros, setRegistros] = useState([]);
+    const [respuesta, setRespuesta] = useState({});
     const [cargando, setCargando] = useState(true);
     const [urlQR, setUrlQR] = useState("");
     const [segundosRestantes, setSegundosRestantes] = useState(DURACION_MS / 1000);
@@ -22,12 +23,16 @@ export default function ListadoSeguridad() {
                 const respuesta = await fetch(`${API_URL}/registroLlegada/verHoyPG`, {
                     credentials: "include",
                 });
+                setRespuesta(respuesta)
                 const data = await respuesta.json();
                 if (respuesta.ok) {
                     setRegistros(data.registros);
                 } else {
                     console.error(data.mensaje);
                 }
+                                console.error("datos  ----:", respuesta.status
+                                );
+
             } catch (error) {
                 console.error("Error obteniendo registros:", error);
             } finally {
@@ -139,13 +144,24 @@ export default function ListadoSeguridad() {
                                         </td>
                                     </tr>
                                 ))
-                            ) : (
+                            ) : respuesta.status === 401 ? (
                                 <tr>
-                                    <td colSpan="5" className="text-center py-6 text-slate-500 text-left">
+                                    <td colSpan="5" className="text-center py-3 text-slate-500">
+                                        No está autorizado para esta consulta.
+                                    </td>
+                                </tr>
+                            ):
+                            (
+                                <tr>
+                                    <td colSpan="5" className="text-center py-3 text-slate-500">
                                         No hay registros para el día de hoy.
                                     </td>
                                 </tr>
-                            )}
+                            )
+                        
+                        
+                        
+                        }
                         </tbody>
                     </table>
                 </div>

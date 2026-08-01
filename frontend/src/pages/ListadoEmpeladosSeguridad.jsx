@@ -34,7 +34,7 @@ export default function ListadoSeguridad() {
                                 );
 
             } catch (error) {
-                console.error("Error obteniendo registros:", error);
+                console.log("Error obteniendo registros:", error);
             } finally {
                 setCargando(false);
             }
@@ -117,7 +117,7 @@ export default function ListadoSeguridad() {
                                 <th className="text-left text-white font-bold text-base px-4 py-3">Nombre</th>
                                 <th className="text-left text-white font-bold text-base px-4 py-3">Ubicación</th>
                                 <th className="text-left text-white font-bold text-base px-4 py-3">Hora</th>
-                                <th className="text-left text-center text-white font-bold text-base px-4 py-3">Estado</th>
+                                {/* <th className="text-left text-center text-white font-bold text-base px-4 py-3">Estado</th> */}
                             </tr>
                         </thead>
                         <tbody>
@@ -130,7 +130,7 @@ export default function ListadoSeguridad() {
                                         </td>
                                         <td className="px-4 py-3 border-b text-left">{registro.location}</td>
                                         <td className="px-4 py-3 font-semibold border-b text-left">{registro.hora}</td>
-                                        <td className="px-4 py-3 border-b text-center text-left">
+                                        {/* <td className="px-4 py-3 border-b text-center text-left">
                                             <button
                                                 onClick={() => cambiarEstado(registro.id)}
                                                 className={`px-4 py-2 rounded-lg font-semibold text-white transition-all duration-300 ${
@@ -141,7 +141,7 @@ export default function ListadoSeguridad() {
                                             >
                                                 {registro.pagado ? "Pagado" : "Pendiente"}
                                             </button>
-                                        </td>
+                                        </td> */}
                                     </tr>
                                 ))
                             ) : respuesta.status === 401 ? (

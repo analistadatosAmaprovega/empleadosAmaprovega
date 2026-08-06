@@ -113,7 +113,7 @@ const registrarLlegada = async (req, res) => {
             Nombre: datosEmpleado.nombre,
             fecha,
             hora,
-            Lugar: "La Vega, R.D."
+            Lugar: "Principal"
         });
 
     } catch (error) {
@@ -207,7 +207,7 @@ const registrarLlegadaPG = async (req, res) => {
                 datosEmpleado.nombre,
                 fecha,
                 hora,
-                "La Vega, R.D."
+                "Principal/Finca"
             ]
         );
 
@@ -219,7 +219,7 @@ const registrarLlegadaPG = async (req, res) => {
             apodo: datosEmpleado.apodo,
             fecha,
             hora,
-            Lugar: "La Vega, R.D."
+            Lugar: "Principal/Finca"
         });
 
     } catch (error) {
@@ -244,17 +244,33 @@ const verLlegadasHoyPG = async (req, res) => {
 
         const { rows } = await postgres.query(
             `SELECT
-                id,
-                id_empleado,
-                nombre,
-                fecha,
-                hora,
-                location
-             FROM llegada_inicial
-             WHERE fecha = CURRENT_DATE
-             ORDER BY hora DESC`
+    li.id,
+    li.id_empleado,
+    li.nombre,
+    e.apellido,
+    e.apodo,
+    e.cargo,
+    li.fecha,
+    li.hora,
+    li.location
+FROM llegada_inicial AS li
+INNER JOIN empleados AS e
+    ON li.id_empleado = e.id
+WHERE li.fecha = CURRENT_DATE
+ORDER BY li.hora DESC`
         );
-
+        //   const { rows } = await postgres.query(
+        //             `SELECT
+        //                 id,
+        //                 id_empleado,
+        //                 nombre,
+        //                 fecha,
+        //                 hora,
+        //                 location
+        //              FROM llegada_inicial
+        //              WHERE fecha = CURRENT_DATE
+        //              ORDER BY hora DESC`
+        //         );
         return res.status(200).json({
             mensaje: "Registros de hoy obtenidos correctamente",
             total: rows.length,

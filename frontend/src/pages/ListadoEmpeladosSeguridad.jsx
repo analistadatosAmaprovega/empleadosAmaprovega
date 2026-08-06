@@ -12,7 +12,7 @@ export default function ListadoSeguridad() {
     const [segundosRestantes, setSegundosRestantes] = useState(DURACION_MS / 1000);
 
     const generarNuevoQR = () => {
-       const timestamp = Date.now();
+        const timestamp = Date.now();
         setUrlQR(`${"https://empleadosamaprovega.onrender.com"}/registro/${timestamp}`);
         setSegundosRestantes(DURACION_MS / 1000);
     };
@@ -30,8 +30,8 @@ export default function ListadoSeguridad() {
                 } else {
                     console.error(data.mensaje);
                 }
-                                console.error("datos  ----:", respuesta.status
-                                );
+                console.log("datos --> :", data
+                );
 
             } catch (error) {
                 console.log("Error obteniendo registros:", error);
@@ -83,10 +83,10 @@ export default function ListadoSeguridad() {
                         <h1 className="text-3xl font-bold text-slate-900 tracking-tight">
                             Listado de Dietas
                         </h1>
-                        <p className="text-base text-slate-500 mt-1 flex items-center gap-2">
-                            <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
+                        {/* <p className="text-base text-slate-500 mt-1 flex items-center gap-2">
+                            <span className="w-2 h-2 rounded-full bg-emerald-400"></span>
                             {registros.length} persona{registros.length !== 1 && "s"}
-                        </p>
+                        </p> */}
                     </div>
 
                     <div className="flex items-center gap-4">
@@ -109,27 +109,42 @@ export default function ListadoSeguridad() {
                     </div>
                 </div>
 
-                <div className="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm">
+                <div className="bg-white rounded-2xl overflow-hidden shadow-sm">
                     <table className="w-full">
                         <thead>
-                            <tr className="bg-slate-800">
-                                <th className="text-left text-white font-bold text-base px-4 py-3">ID</th>
-                                <th className="text-left text-white font-bold text-base px-4 py-3">Nombre</th>
+                            <tr className="bg-slate-900">
+                                {/* <th className="text-left text-white font-bold text-base px-4 py-3">ID</th> */}
+                                <th className="text-left text-white font-bold text-base px-4 py-3">Colaborador  
+
+
+                           
+({registros.length})
+                            
+                        
+                                </th>
+                                <th className="text-left text-white font-bold text-base px-4 py-3">Apodo</th>
+                                {/* <th className="text-left text-white font-bold text-base px-4 py-3">Cargo</th> */}
                                 <th className="text-left text-white font-bold text-base px-4 py-3">Ubicación</th>
-                                <th className="text-left text-white font-bold text-base px-4 py-3">Hora</th>
+                                <th className="text-left text-white font-bold text-base px-4 py-3">H. Solicitud</th>
                                 {/* <th className="text-left text-center text-white font-bold text-base px-4 py-3">Estado</th> */}
                             </tr>
                         </thead>
                         <tbody>
                             {registros.length > 0 ? (
                                 registros.map((registro, index) => (
-                                    <tr key={registro.id} className={index % 2 === 0 ? "bg-white" : "bg-slate-100"}>
-                                        <td className="px-4 py-3 border-b text-left">{registro.id_empleado}</td>
-                                        <td className="px-4 py-3 font-semibold border-b text-left">
+                                    <tr key={registro.id} className={index % 2 === 0 ? "bg-white text-black" : "text-black bg-slate-300"}>
+                                        {/* <td className="px-4 py-3  text-left">{registro.id_empleado}</td> */}
+                                        <td className="px-4 py-3 font-semibold  text-left">
                                             {registro.nombre} {registro.apellido}
                                         </td>
-                                        <td className="px-4 py-3 border-b text-left">{registro.location}</td>
-                                        <td className="px-4 py-3 font-semibold border-b text-left">{registro.hora}</td>
+                                        <td className="px-4 py-3   text-left">
+                                            {registro.apodo}
+                                        </td>
+                                        {/* <td className="px-4 py-3  text-left">
+                                            {registro.cargo}
+                                        </td> */}
+                                        <td className="px-4 py-3  text-left">{registro.location}</td>
+                                        <td className="px-4 py-3   text-left">{registro.hora}</td>
                                         {/* <td className="px-4 py-3 border-b text-center text-left">
                                             <button
                                                 onClick={() => cambiarEstado(registro.id)}
@@ -150,18 +165,18 @@ export default function ListadoSeguridad() {
                                         No está autorizado para esta consulta.
                                     </td>
                                 </tr>
-                            ):
-                            (
-                                <tr>
-                                    <td colSpan="5" className="text-center py-3 text-slate-500">
-                                        No hay registros para el día de hoy.
-                                    </td>
-                                </tr>
-                            )
-                        
-                        
-                        
-                        }
+                            ) :
+                                (
+                                    <tr>
+                                        <td colSpan="5" className="text-center py-3 text-slate-500">
+                                            No hay registros para el día de hoy.
+                                        </td>
+                                    </tr>
+                                )
+
+
+
+                            }
                         </tbody>
                     </table>
                 </div>

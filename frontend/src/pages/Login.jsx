@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Eye, EyeOff, Building2 } from "lucide-react";
 import { API_URL } from "../../config.js"; 
 // `${ API_URL }/login/inicioSessionPG`,
+import { useNavigate } from "react-router-dom";
 
 
 function Login() {
@@ -9,6 +10,9 @@ function Login() {
   const [password, setPassword] = useState("");
   const [mensaje, setMensaje] = useState("");
   const [mostrarPassword, setMostrarPassword] = useState(false);
+
+const navigate = useNavigate();
+
 
 const iniciarSesion = async (e) => {
   e.preventDefault();
@@ -36,6 +40,7 @@ const iniciarSesion = async (e) => {
 
       // Solo si inició sesión correctamente
       window.location.reload();
+      navigate("/");
     } else {
       setMensaje(datos.mensaje);
     }

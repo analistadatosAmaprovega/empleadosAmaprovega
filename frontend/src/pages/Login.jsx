@@ -18,7 +18,7 @@ const iniciarSesion = async (e) => {
   e.preventDefault();
   try {
     const respuesta = await fetch(
-      `${ API_URL }/login/inicioSessionPG`,
+      `${ API_URL }login/inicioSessionPG`,
       {
         method: "POST",
         credentials: "include",

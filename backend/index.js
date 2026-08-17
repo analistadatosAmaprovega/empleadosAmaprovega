@@ -94,7 +94,7 @@ app.get('/a', (req, res) => {
     res.send('Bienvenido a la ruta /a');
 });
 app.use((req, res) => {
-  res.status(404).json({ mensaje: "Ruta no encontrada" });
+  res.status(404).json({ mensaje: "Ruta no encontrada 17082026" });
 });
 
 app.use((err, req, res, next) => {

@@ -20,7 +20,7 @@ export default function ListadoSeguridad() {
     useEffect(() => {
         const obtenerRegistros = async () => {
             try {
-                const respuesta = await fetch(`${API_URL}/registroLlegada/verHoyPG`, {
+                const respuesta = await fetch(`${API_URL}registroLlegada/verHoyPG`, {
                     credentials: "include",
                 });
                 setRespuesta(respuesta)

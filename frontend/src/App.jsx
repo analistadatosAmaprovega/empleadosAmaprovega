@@ -25,7 +25,7 @@ function App() {
       try {
 
         const respuesta = await fetch(
-          `${API_URL}/login/verificarUsuario`,
+          `${API_URL}login/verificarUsuario`,
           {
             method: "GET",
             credentials: "include"

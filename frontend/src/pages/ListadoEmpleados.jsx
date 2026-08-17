@@ -138,7 +138,7 @@ export default function ListadoAsistencia() {
       setError(null);
       try {
         const resp = await fetch(          
-          `${API_URL}/registroLlegada/verTodoPG`, {
+          `${API_URL}registroLlegada/verTodoPG`, {
           signal: controller.signal,
           credentials: "include", 
         });

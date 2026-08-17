@@ -56,7 +56,7 @@ export default function ReciboConfirmacion() {
             try {
                 const respuesta = await fetch(
 
-                    `${API_URL}/registroLlegada/nuevoPG`,
+                    `${API_URL}registroLlegada/nuevoPG`,
                     {
                         method: "POST",
                         credentials: "include",

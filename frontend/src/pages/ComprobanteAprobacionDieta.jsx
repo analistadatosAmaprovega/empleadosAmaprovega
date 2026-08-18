@@ -39,7 +39,7 @@ export default function ReciboConfirmacion() {
     const [cargando, setCargando] = useState(true);
     console.log(empleado);
     const { token } = useParams();
-  console.log(token)
+  console.log("Valor del Token Extraido", token)
     
     const navigate = useNavigate();
     useEffect(() => {

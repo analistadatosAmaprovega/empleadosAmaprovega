@@ -61,8 +61,9 @@ export default function ReciboConfirmacion() {
                         method: "POST",
                         credentials: "include",
                     }
+                    
                 );
-                console.log(respuesta);
+                console.log("Respuesta al registrar dieta", respuesta);
                 
                 if (respuesta.status === 401) {
                     navigate("/error", { replace: true });
@@ -74,7 +75,7 @@ export default function ReciboConfirmacion() {
                 if (respuesta.ok) {
                     setEmpleado(datos);
                 } else {
-                    console.error(datos.mensaje);
+                    console.error("Error en la respuesta al registrar dieta", datos.mensaje);
                 }
             } catch (error) {
                 console.error(error);

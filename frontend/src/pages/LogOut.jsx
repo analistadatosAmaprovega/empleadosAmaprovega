@@ -9,12 +9,12 @@ function CerrarSesion({empleado}) {
   const cerrarSesion = async () => {
     try {
       const respuesta = await fetch(
-`${ API_URL }/login/cerrarSession`,
+`${API_URL}login/cerrarSession`,
         {
           method: "POST",
           credentials: "include",
         }
-      );
+      );  
 
       const datos = await respuesta.json();
 

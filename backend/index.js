@@ -76,10 +76,10 @@ app.use(cors({
 
 console.log(process.env.FRONTEND_URL);
 
-app.use((req, res) => {
+app.use((req, res, next) => {
 
     console.log(`ruta INGRESADA: ${req.method} ${req.originalUrl}`);
-
+next()
     // res.status(200).json({
     //     mensaje: "Ruta 17082026", 
     //     ruta: `${req.method} ${req.originalUrl}`

@@ -76,7 +76,14 @@ app.use(cors({
 
 console.log(process.env.FRONTEND_URL);
 
+app.use((req, res) => {
+    console.log(`ruta: ${req.method} ${req.originalUrl}`);
 
+    res.status(404).json({
+        mensaje: "Ruta 17082026", 
+        ruta: `${req.method} ${req.originalUrl}`
+    });
+});
 app.use(express.json());
 app.use(cookieParser());
 
@@ -93,14 +100,7 @@ app.get('/', (req, res) => {
 app.get('/a', (req, res) => {
     res.send('Bienvenido a la ruta /a');
 });
-app.use((req, res) => {
-    console.log(`ruta: ${req.method} ${req.originalUrl}`);
 
-    res.status(404).json({
-        mensaje: "Ruta no encontrada 17082026", 
-        ruta: `${req.method} ${req.originalUrl}`
-    });
-});
 
 app.use((err, req, res, next) => {
     console.error(err); F

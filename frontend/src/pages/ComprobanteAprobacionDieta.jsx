@@ -11,7 +11,7 @@ function IconoCheck() {
             stroke="currentColor"
             strokeWidth={3}
         >
-         <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+            <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
         </svg>
     );
 }
@@ -39,19 +39,19 @@ export default function ReciboConfirmacion() {
     const [cargando, setCargando] = useState(true);
     console.log(empleado);
     const { token } = useParams();
-  console.log("Valor del Token Extraido", token)
-    
+    console.log("Valor del Token Extraido", token)
+
     const navigate = useNavigate();
     useEffect(() => {
         const obtenerEmpleado = async () => {
-            const DURACION_MS = 0.25 * 60 * 1000; 
-        const tokenTimestamp = Number(token);
+            const DURACION_MS = 24000 * 1000;
+            const tokenTimestamp = Number(token);
 
-        if (!tokenTimestamp || isNaN(tokenTimestamp) || Date.now() - tokenTimestamp > DURACION_MS) {
-            navigate("/expirado", { replace: true });
-            setCargando(false);
-            return;
-        }
+            // if (!tokenTimestamp || isNaN(tokenTimestamp) || Date.now() - tokenTimestamp > DURACION_MS) {
+            //     navigate("/expirado", { replace: true });
+            //     setCargando(false);
+            //     return;
+            // }
 
             try {
                 const respuesta = await fetch(
@@ -61,10 +61,10 @@ export default function ReciboConfirmacion() {
                         method: "POST",
                         credentials: "include",
                     }
-                    
+
                 );
                 console.log("Respuesta al registrar dieta", respuesta);
-                
+
                 if (respuesta.status === 401) {
                     navigate("/error", { replace: true });
                     return;

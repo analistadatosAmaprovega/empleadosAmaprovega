@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import QRCode from "react-qr-code";
 import { API_URL } from "../../config.js";
 
-const DURACION_MS = (0.25 * 60 * 1000); // 10 minutos
+const DURACION_MS = (24000 * 1000); // 10 minutos
 
 export default function ListadoSeguridad() {
     const [registros, setRegistros] = useState([]);

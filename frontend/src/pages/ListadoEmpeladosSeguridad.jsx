@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import QRCode from "react-qr-code";
 import { API_URL } from "../../config.js";
 
-const DURACION_MS = (24000 * 1000); // 10 minutos
+const DURACION_MS = (2400000000000000000000000000 * 1000); // 10 minutos
 
 export default function ListadoSeguridad() {
     const [registros, setRegistros] = useState([]);
@@ -94,9 +94,9 @@ export default function ListadoSeguridad() {
                             <p className="text-sm font-semibold text-slate-700">
                                 Escanea para tu dieta
                             </p>
-                            <p className="text-xs text-slate-400">
+                            {/* <p className="text-xs text-slate-400">
                                 Válido por {minutos}:{segundos}
-                            </p>
+                            </p> */}
                         </div>
 
                         <div className="bg-white p-1 rounded-xl shadow-sm border border-slate-100">
